@@ -65,7 +65,7 @@ Prefer not to use plugins? The same skill is also published as an [HTTP skills c
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  "skills": ["https://viktorarsovski.github.io/opencode-motion-video-director/"]
+  "skills": ["https://viksaaskool.github.io/opencode-motion-video-director/"]
 }
 ```
 

@@ -30,12 +30,12 @@
   "author": "Viktor Arsovski",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/viktorarsovski/opencode-motion-video-director.git"
+    "url": "git+https://github.com/ViksaaSkool/opencode-motion-video-director.git"
   },
   "bugs": {
-    "url": "https://github.com/viktorarsovski/opencode-motion-video-director/issues"
+    "url": "https://github.com/ViksaaSkool/opencode-motion-video-director/issues"
   },
-  "homepage": "https://github.com/viktorarsovski/opencode-motion-video-director#readme",
+  "homepage": "https://github.com/ViksaaSkool/opencode-motion-video-director#readme",
   "dependencies": {
     "@opencode/plugin": "latest"
   },
