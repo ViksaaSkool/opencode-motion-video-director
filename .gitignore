@@ -1,0 +1,10 @@
+node_modules/
+dist/
+catalog/
+*.tgz
+.DS_Store
+.env
+*.env
+cache/
+renders/
+assets/
