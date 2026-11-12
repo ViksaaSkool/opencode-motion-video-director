@@ -120,3 +120,21 @@ test("catalog build produces a valid index.json", () => {
     expect(existsSync(join(out, "motion-video-director", file))).toBe(true)
   }
 })
+
+test("catalog build emits a human-readable landing page", () => {
+  const html = readFileSync(join(repoRoot, "catalog", "index.html"), "utf8")
+  // title from the SKILL.md frontmatter display name
+  expect(html).toContain("<title>Motion Video Director — OpenCode plugin</title>")
+  // install snippets for both distribution channels
+  expect(html).toContain("opencode-motion-video-director")
+  expect(html).toContain('"skills": ["https://viksaaskool.github.io/opencode-motion-video-director/"]')
+  // the MCP table mirrors the plugin catalog
+  expect(html).toContain("FIRECRAWL_API_KEY")
+  expect(html).toContain("ELEVENLABS_API_KEY")
+  // every catalog file is linked with a relative href that matches its Pages URL
+  expect(html).toContain('href="motion-video-director/SKILL.md"')
+  expect(html).toContain('href="motion-video-director/scripts/with-env.sh"')
+  // well-formed enough: exactly one doctype, no raw unescaped template leftovers
+  expect(html.match(/<!doctype html>/gi)).toHaveLength(1)
+  expect(html).not.toContain("${")
+})

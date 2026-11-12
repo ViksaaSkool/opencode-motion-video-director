@@ -71,6 +71,8 @@ Prefer not to use plugins? The same skill is also published as an [HTTP skills c
 
 (Catalog installs get the skill only — no `/mvd-setup` command and no MCP auto-setup.)
 
+The site's root is a human-readable landing page (install snippets, MCP table, file links); the machine-readable catalog OpenCode fetches is at [`index.json`](https://viksaaskool.github.io/opencode-motion-video-director/index.json).
+
 ## What the skill covers
 
 - **Preflight & project tracking** — tool checks, `.env` key handling, `PROGRESS.md`/`LOG.md`/`manifest.json` so any session can resume.
