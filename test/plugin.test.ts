@@ -147,4 +147,7 @@ test("catalog build emits a human-readable landing page", () => {
   expect(html).toContain('<link rel="icon" type="image/png" href="logo.png">')
   expect(html).toContain('<meta property="og:image" content="https://viksaaskool.github.io/opencode-motion-video-director/og.png">')
   expect(html).toContain('<meta name="twitter:card" content="summary_large_image">')
+  // logo mark sits beside the title in the header
+  expect(html).toContain('<header class="site-header">')
+  expect(html).toContain('<img class="logo" src="logo.png" width="56" height="56"')
 })

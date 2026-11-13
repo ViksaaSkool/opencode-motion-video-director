@@ -157,14 +157,17 @@ function landingPage(pkg, skillName, files) {
     background: linear-gradient(90deg, #f778ba, #a371f7);
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
+  .site-header { display: flex; align-items: center; gap: 16px; }
+  img.logo { width: 56px; height: 56px; border-radius: 14px; border: 1px solid #30363d; flex: none; }
+  .site-header h1 { margin: 0; }
   .badge {
-    display: inline-block; margin: 0 0 18px; padding: 2px 10px; font-size: .8rem;
+    display: inline-block; margin: 4px 0 0; padding: 2px 10px; font-size: .8rem;
     border: 1px solid #30363d; border-radius: 999px; color: #9198a1;
   }
   h2 { font-size: 1.15rem; margin: 40px 0 12px; border-bottom: 1px solid #21262d; padding-bottom: 6px; }
   p.tagline { color: #b6c2cf; margin-top: 0; }
   img.hero {
-    display: block; width: 100%; height: auto; margin: 10px 0 4px;
+    display: block; width: 100%; height: auto; margin: 22px 0 4px;
     border: 1px solid #30363d; border-radius: 12px; background: #0a0a0a;
   }
   p.lead { color: #9198a1; }
@@ -188,8 +191,13 @@ function landingPage(pkg, skillName, files) {
 </head>
 <body>
 <main>
-  <h1>${escapeHtml(title)}</h1>
-  <span class="badge">OpenCode plugin &middot; v${escapeHtml(pkg.version)}</span>
+  <header class="site-header">
+    <img class="logo" src="logo.png" width="56" height="56" alt="">
+    <div>
+      <h1>${escapeHtml(title)}</h1>
+      <span class="badge">OpenCode plugin &middot; v${escapeHtml(pkg.version)}</span>
+    </div>
+  </header>
   <img class="hero" src="explanation.jpg" width="1672" height="941"
        alt="Video creation workflow: 1 Plan (explain the process and goal) — 2 Input (you provide references and a story) — 3 Voiceover (paste-ready ElevenLabs script, generate the MP3 and return it) — 4 Build (create the video, add assets and sound) — 5 Preview (review and iterate) — 6 Render (export mp4 with ffmpeg and deliver). Tools: SVG, p5, Three.js, GSAP, Motion Canvas, Revideo, ElevenLabs, Firecrawl, Playwright, LottieFiles, Freesound, Pexels/Pixabay, ffmpeg. Use when you ask to make or edit a video, animate, caption, add voiceover, or design sound.">
 
