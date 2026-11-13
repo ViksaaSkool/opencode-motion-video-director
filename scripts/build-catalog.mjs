@@ -8,7 +8,7 @@
  *
  * The entry `version` is the package version — bump it so clients refresh.
  */
-import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { dirname, join, relative } from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -49,6 +49,13 @@ const index = {
 }
 writeFileSync(join(outDir, "index.json"), JSON.stringify(index, null, 2) + "\n")
 
+// Hero graphic for the landing page (source: art/, optimized JPEG kept small).
+const heroSource = join(repoRoot, "art", "explanation.jpg")
+if (!existsSync(heroSource)) {
+  throw new Error(`landing-page hero image missing: ${heroSource} — commit the optimized JPEG (converted from art/explanation.png) so CI can build the site`)
+}
+cpSync(heroSource, join(outDir, "explanation.jpg"))
+
 console.log(`catalog built: ${outDir}`)
 console.log(`  entry: ${name} v${pkg.version} (${files.length} files) + index.html`)
 for (const f of files) console.log(`   - ${f}`)
@@ -83,7 +90,7 @@ const MCPS = [
 ]
 
 function landingPage(pkg, skillName, files) {
-  const { title, description } = skillMeta(join(repoRoot, "skill", skillName))
+  const { title } = skillMeta(join(repoRoot, "skill", skillName))
   const display = files.slice().sort((a, b) => (a === "SKILL.md" ? -1 : b === "SKILL.md" ? 1 : a.localeCompare(b)))
   const fileList = display
     .map((f) => {
@@ -122,6 +129,10 @@ function landingPage(pkg, skillName, files) {
   }
   h2 { font-size: 1.15rem; margin: 40px 0 12px; border-bottom: 1px solid #21262d; padding-bottom: 6px; }
   p.tagline { color: #b6c2cf; margin-top: 0; }
+  img.hero {
+    display: block; width: 100%; height: auto; margin: 10px 0 4px;
+    border: 1px solid #30363d; border-radius: 12px; background: #0a0a0a;
+  }
   p.lead { color: #9198a1; }
   pre {
     background: #161b22; border: 1px solid #30363d; border-radius: 8px;
@@ -145,7 +156,8 @@ function landingPage(pkg, skillName, files) {
 <main>
   <h1>${escapeHtml(title)}</h1>
   <span class="badge">OpenCode plugin &middot; v${escapeHtml(pkg.version)}</span>
-  <p class="tagline">${escapeHtml(description)}</p>
+  <img class="hero" src="explanation.jpg" width="1672" height="941"
+       alt="Video creation workflow: 1 Plan (explain the process and goal) — 2 Input (you provide references and a story) — 3 Voiceover (paste-ready ElevenLabs script, generate the MP3 and return it) — 4 Build (create the video, add assets and sound) — 5 Preview (review and iterate) — 6 Render (export mp4 with ffmpeg and deliver). Tools: SVG, p5, Three.js, GSAP, Motion Canvas, Revideo, ElevenLabs, Firecrawl, Playwright, LottieFiles, Freesound, Pexels/Pixabay, ffmpeg. Use when you ask to make or edit a video, animate, caption, add voiceover, or design sound.">
 
   <h2>Install</h2>
   <p>Add the plugin to your <code>opencode.json(c)</code>:</p>

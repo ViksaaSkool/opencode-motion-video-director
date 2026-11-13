@@ -137,4 +137,8 @@ test("catalog build emits a human-readable landing page", () => {
   // well-formed enough: exactly one doctype, no raw unescaped template leftovers
   expect(html.match(/<!doctype html>/gi)).toHaveLength(1)
   expect(html).not.toContain("${")
+  // hero graphic replaces the intro text: emitted into the site and referenced by the page
+  expect(existsSync(join(repoRoot, "catalog", "explanation.jpg"))).toBe(true)
+  expect(html).toContain('<img class="hero" src="explanation.jpg"')
+  expect(html).not.toContain('<p class="tagline">')
 })
