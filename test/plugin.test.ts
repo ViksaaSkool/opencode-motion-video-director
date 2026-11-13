@@ -141,4 +141,10 @@ test("catalog build emits a human-readable landing page", () => {
   expect(existsSync(join(repoRoot, "catalog", "explanation.jpg"))).toBe(true)
   expect(html).toContain('<img class="hero" src="explanation.jpg"')
   expect(html).not.toContain('<p class="tagline">')
+  // brand assets: favicon + social preview, with absolute og:image URLs
+  expect(existsSync(join(repoRoot, "catalog", "logo.png"))).toBe(true)
+  expect(existsSync(join(repoRoot, "catalog", "og.png"))).toBe(true)
+  expect(html).toContain('<link rel="icon" type="image/png" href="logo.png">')
+  expect(html).toContain('<meta property="og:image" content="https://viksaaskool.github.io/opencode-motion-video-director/og.png">')
+  expect(html).toContain('<meta name="twitter:card" content="summary_large_image">')
 })

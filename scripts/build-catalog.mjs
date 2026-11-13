@@ -49,6 +49,22 @@ const index = {
 }
 writeFileSync(join(outDir, "index.json"), JSON.stringify(index, null, 2) + "\n")
 
+// Brand assets for the landing page (sources in art/; kept optimized so the page loads fast).
+// - logo.png  : favicon / apple-touch-icon (square)
+// - og.png    : social preview card, 1200x630 (og:image and twitter:image require an absolute URL)
+const SITE = "https://viksaaskool.github.io/opencode-motion-video-director/"
+const assets = [
+  { src: "logo.png", out: "logo.png" },
+  { src: "og.png", out: "og.png" },
+]
+for (const a of assets) {
+  const from = join(repoRoot, "art", a.src)
+  if (!existsSync(from)) {
+    throw new Error(`landing-page brand asset missing: ${from} — commit it so CI can build the site`)
+  }
+  cpSync(from, join(outDir, a.out))
+}
+
 // Hero graphic for the landing page (source: art/, optimized JPEG kept small).
 const heroSource = join(repoRoot, "art", "explanation.jpg")
 if (!existsSync(heroSource)) {
@@ -91,6 +107,9 @@ const MCPS = [
 
 function landingPage(pkg, skillName, files) {
   const { title } = skillMeta(join(repoRoot, "skill", skillName))
+  const socialTitle = `${title} — OpenCode plugin`
+  const socialDescription = pkg.description
+  const socialImage = `${SITE}og.png`
   const display = files.slice().sort((a, b) => (a === "SKILL.md" ? -1 : b === "SKILL.md" ? 1 : a.localeCompare(b)))
   const fileList = display
     .map((f) => {
@@ -108,8 +127,23 @@ function landingPage(pkg, skillName, files) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escapeHtml(title)} — OpenCode plugin</title>
-<meta name="description" content="${escapeHtml(pkg.description)}">
+<title>${escapeHtml(socialTitle)}</title>
+<meta name="description" content="${escapeHtml(socialDescription)}">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="${escapeHtml(title)}">
+<meta property="og:title" content="${escapeHtml(socialTitle)}">
+<meta property="og:description" content="${escapeHtml(socialDescription)}">
+<meta property="og:url" content="${SITE}">
+<meta property="og:image" content="${socialImage}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${escapeHtml(title)} logo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeHtml(socialTitle)}">
+<meta name="twitter:description" content="${escapeHtml(socialDescription)}">
+<meta name="twitter:image" content="${socialImage}">
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; }
