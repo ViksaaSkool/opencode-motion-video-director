@@ -205,7 +205,9 @@ function landingPage(pkg, skillName, files) {
        alt="Video creation workflow: 1 Plan (explain the process and goal) — 2 Input (you provide references and a story) — 3 Voiceover (paste-ready ElevenLabs script, generate the MP3 and return it) — 4 Build (create the video, add assets and sound) — 5 Preview (review and iterate) — 6 Render (export mp4 with ffmpeg and deliver). Tools: SVG, p5, Three.js, GSAP, Motion Canvas, Revideo, ElevenLabs, Firecrawl, Playwright, LottieFiles, Freesound, Pexels/Pixabay, ffmpeg. Use when you ask to make or edit a video, animate, caption, add voiceover, or design sound.">
 
   <h2>Install</h2>
-  <p><a href="https://www.npmjs.com/package/${escapeHtml(pkg.name)}">opencode-motion-video-director</a> is on npm — add the plugin to your <code>opencode.json(c)</code>:</p>
+  <p><a href="https://www.npmjs.com/package/${escapeHtml(pkg.name)}">opencode-motion-video-director</a> is on npm:</p>
+  <pre>npm i opencode-motion-video-director</pre>
+  <p>Then register the plugin in your <code>opencode.json(c)</code>:</p>
   <pre>{ "$schema": "https://opencode.ai/config.json",
   "plugins": ["opencode-motion-video-director"] }</pre>
   <p>Optionally let it register the recommended MCP servers at runtime (each only when
