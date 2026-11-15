@@ -164,6 +164,8 @@ function landingPage(pkg, skillName, files) {
     display: inline-block; margin: 4px 0 0; padding: 2px 10px; font-size: .8rem;
     border: 1px solid #30363d; border-radius: 999px; color: #9198a1;
   }
+  a.badge { text-decoration: none; }
+  a.badge:hover { color: #e6edf3; border-color: #9198a1; }
   h2 { font-size: 1.15rem; margin: 40px 0 12px; border-bottom: 1px solid #21262d; padding-bottom: 6px; }
   p.tagline { color: #b6c2cf; margin-top: 0; }
   img.hero {
@@ -196,13 +198,14 @@ function landingPage(pkg, skillName, files) {
     <div>
       <h1>${escapeHtml(title)}</h1>
       <span class="badge">OpenCode plugin &middot; v${escapeHtml(pkg.version)}</span>
+      <a class="badge" href="https://www.npmjs.com/package/${escapeHtml(pkg.name)}">npm</a>
     </div>
   </header>
   <img class="hero" src="explanation.jpg" width="1672" height="941"
        alt="Video creation workflow: 1 Plan (explain the process and goal) — 2 Input (you provide references and a story) — 3 Voiceover (paste-ready ElevenLabs script, generate the MP3 and return it) — 4 Build (create the video, add assets and sound) — 5 Preview (review and iterate) — 6 Render (export mp4 with ffmpeg and deliver). Tools: SVG, p5, Three.js, GSAP, Motion Canvas, Revideo, ElevenLabs, Firecrawl, Playwright, LottieFiles, Freesound, Pexels/Pixabay, ffmpeg. Use when you ask to make or edit a video, animate, caption, add voiceover, or design sound.">
 
   <h2>Install</h2>
-  <p>Add the plugin to your <code>opencode.json(c)</code>:</p>
+  <p><a href="https://www.npmjs.com/package/${escapeHtml(pkg.name)}">opencode-motion-video-director</a> is on npm — add the plugin to your <code>opencode.json(c)</code>:</p>
   <pre>{ "$schema": "https://opencode.ai/config.json",
   "plugins": ["opencode-motion-video-director"] }</pre>
   <p>Optionally let it register the recommended MCP servers at runtime (each only when
