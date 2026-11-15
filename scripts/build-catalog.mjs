@@ -184,6 +184,12 @@ function landingPage(pkg, skillName, files) {
   ul.files a { color: #a5b6fc; text-decoration: none; }
   ul.files a:hover { text-decoration: underline; }
   .dim { color: #9198a1; }
+  .examples { display: flex; flex-wrap: wrap; gap: 20px; }
+  .example { flex: 1 1 240px; max-width: 300px; margin: 0; }
+  .example .frame { position: relative; padding-top: 177.78%; border-radius: 12px; overflow: hidden; border: 1px solid #30363d; background: #000; }
+  .example iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .example figcaption { margin-top: 8px; font-size: .925rem; color: #e6edf3; }
+  .example figcaption .dim { font-size: .8rem; }
   table { border-collapse: collapse; width: 100%; font-size: .925rem; }
   th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #21262d; }
   th { color: #9198a1; font-weight: 500; }
@@ -227,6 +233,19 @@ function landingPage(pkg, skillName, files) {
     <li><strong><code>/mvd-setup</code></strong> — in your video project directory, it runs Preflight, walks you through missing tools, creates your gitignored <code>.env</code> key file, and sends the kickoff message.</li>
     <li><strong>MCP auto-setup</strong> — registers the recommended servers behind <code>options.mcps</code>; servers you configured yourself are never touched.</li>
   </ul>
+
+  <h2>Examples</h2>
+  <p class="lead">Videos produced with the skill:</p>
+  <div class="examples">
+    <figure class="example">
+      <div class="frame"><iframe src="https://www.youtube.com/embed/RvGp99hqeic" title="Example video made with Deepseek V4.1 Flash" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe></div>
+      <figcaption><span class="dim">model</span> Deepseek V4.1 Flash</figcaption>
+    </figure>
+    <figure class="example">
+      <div class="frame"><iframe src="https://www.youtube.com/embed/mTPeMRbde4A" title="Example video made with GPT Astra 6.1" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe></div>
+      <figcaption><span class="dim">model</span> GPT Astra 6.1</figcaption>
+    </figure>
+  </div>
 
   <h2>Recommended MCPs</h2>
   <table>
