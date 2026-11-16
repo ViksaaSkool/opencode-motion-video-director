@@ -113,7 +113,7 @@ Match the pacing and shot rhythm of this reference video [paste link], but rebui
 
 ## Examples
 
-Both videos below are promo spots for [shweep.lol](https://shweep.lol) ("sheep moji") — an app for counting sheep instead of doomscrolling. Each was made end-to-end with this plugin, from the voiceover script through code-drawn scenes to the final ffmpeg render — just with a different model behind the director.
+Both videos below are promo spots for [🐑 shweep.lol](https://shweep.lol) — an app for counting sheep instead of doomscrolling. Each was made end-to-end with this plugin, from the voiceover script through code-drawn scenes to the final ffmpeg render — just with a different model behind the director.
 
 [![Promo made with Deepseek V4.1 Flash](https://img.youtube.com/vi/RvGp99hqeic/hqdefault.jpg)](https://www.youtube.com/watch?v=RvGp99hqeic) — *model: Deepseek V4.1 Flash*
 
