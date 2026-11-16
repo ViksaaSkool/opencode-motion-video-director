@@ -268,7 +268,7 @@ function landingPage(pkg, skillName, files) {
 ${promptBlocks}
 
   <h2>Examples</h2>
-  <p class="lead">Both videos below are promo spots for <a href="https://shweep.lol">🐑 shweep.lol</a> — an app for counting sheep instead of doomscrolling. Each was made end-to-end with this plugin, from the voiceover script through code-drawn scenes to the final ffmpeg render — just with a different model behind the director.</p>
+  <p class="lead">All three videos below are promo spots for <a href="https://shweep.lol">🐑 shweep.lol</a> — an app for counting sheep instead of doomscrolling. Each was made end-to-end with this plugin, from the voiceover script through code-drawn scenes to the final ffmpeg render — just with a different model behind the director.</p>
   <div class="examples">
     <figure class="example">
       <div class="frame"><iframe src="https://www.youtube.com/embed/RvGp99hqeic" title="Example video made with Deepseek V4.1 Flash" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe></div>
@@ -277,6 +277,10 @@ ${promptBlocks}
     <figure class="example">
       <div class="frame"><iframe src="https://www.youtube.com/embed/mTPeMRbde4A" title="Example video made with GPT Astra 6.1" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe></div>
       <figcaption><span class="dim">model</span> GPT Astra 6.1</figcaption>
+    </figure>
+    <figure class="example">
+      <div class="frame"><iframe src="https://www.youtube.com/embed/Pf5HHPDstNU" title="Example video with voiceover made with GLM-5.3-Flash Free" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe></div>
+      <figcaption><span class="dim">with voiceover &middot; model</span> GLM-5.3-Flash Free</figcaption>
     </figure>
   </div>
 
