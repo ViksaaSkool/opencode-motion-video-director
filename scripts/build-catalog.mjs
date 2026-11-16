@@ -105,6 +105,26 @@ const MCPS = [
   { name: "lottiefiles", key: null },
 ]
 
+/** Copy-paste prompts shown on the landing page (keep in sync with README.md). */
+const PROMPTS = [
+  {
+    title: "Reel with a hook",
+    text: 'Make a 15-second vertical reel (9:16) for shweep.lol, an app for counting sheep instead of doomscrolling. Open with a 2-second hook — "still scrolling at 2am?" — then three quick beats: the problem, the app, the calm. Indigo/cream palette with pastel-yellow accents, kinetic type, a soft lo-fi bed and burned-in captions. Write the voiceover script first, generate the MP3 locally with make_vo.py, then build the scenes and render a 1080x1920 MP4.',
+  },
+  {
+    title: "Product explainer",
+    text: "Create a 30-second product explainer for the same app: hook → problem → solution → CTA. Pastel night-sky look, a gentle 2D sheep animation that multiplies as the scrolling settles, warm local voiceover mixed to -14 LUFS. Deliver a 1080p MP4 plus the credits/licence list.",
+  },
+  {
+    title: "Three hook variants",
+    text: "Give me three 6-second hook variants for this video — different opening line and visual metaphor each, same brand colors. Show contact-sheet previews first, then render only the one I pick.",
+  },
+  {
+    title: "Reference-driven style",
+    text: "Match the pacing and shot rhythm of this reference video [paste link], but rebuild it in our style with SVG + GSAP. Keep the same beat count and use the 60-30-10 palette from our brand.",
+  },
+]
+
 function landingPage(pkg, skillName, files) {
   const { title } = skillMeta(join(repoRoot, "skill", skillName))
   const socialTitle = `${title} — OpenCode plugin`
@@ -121,6 +141,12 @@ function landingPage(pkg, skillName, files) {
     (m) => `        <tr><td><code>${m.name}</code></td><td>${m.key ? "yes" : "no"}</td><td>${m.key ? `<code>${m.key}</code>` : "—"}</td></tr>`,
   ).join("\n")
   const built = new Date().toISOString().slice(0, 10)
+  const promptBlocks = PROMPTS.map(
+    (p) => `      <div class="prompt">
+        <h3>${escapeHtml(p.title)}</h3>
+        <pre>${escapeHtml(p.text)}</pre>
+      </div>`,
+  ).join("\n")
 
   return `<!doctype html>
 <html lang="en">
@@ -190,6 +216,8 @@ function landingPage(pkg, skillName, files) {
   .example iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
   .example figcaption { margin-top: 8px; font-size: .925rem; color: #e6edf3; }
   .example figcaption .dim { font-size: .8rem; }
+  .prompt { margin: 0 0 18px; }
+  .prompt h3 { font-size: .95rem; margin: 0 0 6px; }
   table { border-collapse: collapse; width: 100%; font-size: .925rem; }
   th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #21262d; }
   th { color: #9198a1; font-weight: 500; }
@@ -235,8 +263,12 @@ function landingPage(pkg, skillName, files) {
     <li><strong>MCP auto-setup</strong> — registers the recommended servers behind <code>options.mcps</code>; servers you configured yourself are never touched.</li>
   </ul>
 
+  <h2>Example prompts</h2>
+  <p class="lead">Copy one into OpenCode after installing the plugin:</p>
+${promptBlocks}
+
   <h2>Examples</h2>
-  <p class="lead">Videos produced with the skill:</p>
+  <p class="lead">Both videos below are promo spots for <a href="https://shweep.lol">shweep.lol</a> ("sheep moji") — an app for counting sheep instead of doomscrolling. Each was made end-to-end with this plugin, from the voiceover script through code-drawn scenes to the final ffmpeg render — just with a different model behind the director.</p>
   <div class="examples">
     <figure class="example">
       <div class="frame"><iframe src="https://www.youtube.com/embed/RvGp99hqeic" title="Example video made with Deepseek V4.1 Flash" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe></div>
@@ -261,6 +293,9 @@ ${mcpRows}
   <ul class="files">
 ${fileList}
   </ul>
+
+  <h2>Created a video with the plugin?</h2>
+  <p>Want something added — a feature, a preset, a fix? Tell me at <a href="mailto:contact@viktorarsovski.xyz">contact@viktorarsovski.xyz</a>.</p>
 
   <footer>
     <a href="${escapeHtml(pkg.repository.url.replace(/^git\+/, "").replace(/\.git$/, ""))}">GitHub</a>
