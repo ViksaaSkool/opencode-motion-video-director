@@ -1,6 +1,6 @@
 ---
 name: Motion Video Director
-description: "Plan, direct, and produce code-drawn 2D/3D motion graphics and edited videos (reels, hooks, SaaS/product explainers, talking-head edits) locally with OpenCode. Workflow: explain the process → user gives references + story → write a paste-ready ElevenLabs voiceover script → user generates and returns the MP3 → build, preview, render. Uses Canvas/SVG/p5.brush/Three.js/GSAP rendered in headless Chrome, Motion Canvas/Revideo, ffmpeg, small local AI models (cutout, transcription), plus LottieFiles, Freesound, Pexels/Pixabay, Firecrawl and ElevenLabs MCPs, and the Playwright MCP to browse any website visually (Pinterest, Behance, Dribbble, brand sites) and grab image/video assets by itself. Use when the user asks to make, edit, animate, caption, voice, or sound-design a video."
+description: "Plan, direct, and produce code-drawn 2D/3D motion graphics and edited videos (reels, hooks, SaaS/product explainers, talking-head edits) locally with OpenCode. Workflow: explain the process → user gives references + story → write a paste-ready ElevenLabs voiceover script → user generates and returns the MP3 → build, preview, render. Uses Canvas/SVG/p5.brush/Three.js/GSAP rendered in headless Chrome, Motion Canvas/Revideo, ffmpeg, small local AI models (cutout, transcription), plus LottieFiles, Freesound, Pexels/Pixabay, Scrapling and ElevenLabs MCPs, and the Playwright MCP to browse any website visually (Pinterest, Behance, Dribbble, brand sites) and grab image/video assets by itself. Use when the user asks to make, edit, animate, caption, voice, or sound-design a video."
 ---
 
 # Motion Video Director
@@ -33,10 +33,10 @@ You are director, producer, motion designer, editor and sound designer in one.
 | MCP | **LottieFiles** (search + Lottie Creator) | list tools | `npx -y @lottiefiles/creator-mcp@latest` |
 | MCP | **Freesound** (SFX, prefer CC0) | list tools | a Freesound MCP (e.g. sandraschi/sfx-mcp) + `FREESOUND_API_KEY`; no MCP → use the REST API directly (§0c) |
 | MCP | **Pexels / Pixabay** (stock photo/video) | list tools | e.g. xcollantes/free-stock-images-mcp + `PEXELS_API_KEY` / `PIXABAY_API_KEY`; no MCP → REST API directly (§0c) |
-| MCP | **Firecrawl** (research, references, brand sites) | list tools | `npx -y firecrawl-mcp` + `FIRECRAWL_API_KEY` (§0b) |
+| MCP | **Scrapling** (research, references, brand/font sites, anti-bot scraping) | `python3 -c "import scrapling"` + `which scrapling-mcp` | `pip install "scrapling[ai]"` then `scrapling install` (browser deps ≈ few hundred MB; no API key needed); MCP registration in §0b |
 | MCP | **ElevenLabs** (SFX gen, music, optional VO) | list tools | `uvx elevenlabs-mcp` + `ELEVENLABS_API_KEY` (§0b). Not required for VO — the user generates the MP3 on elevenlabs.io from your script |
 | MCP | **Playwright MCP** (visual browser: open sites, search, see results via screenshots, click, download — §16) | list tools (`playwright_browser_navigate`, `playwright_browser_take_screenshot`…) | add it to OpenCode's `mcp.servers` **on the user's PC** (§0b) so downloads land in the project: `"playwright": { "type": "local", "command": ["npx", "@playwright/mcp@latest", "--user-data-dir", "./.browser-profile", "--output-dir", "./cache/browser"] }` (Node ≥18; first run fetches Chromium via `npx playwright install chromium`). Fallback: the agent's own built-in browser, if it has one, then move files to the PC. |
-| Fonts | brand + style fonts | `assets/fonts/` | fetch via Firecrawl from font sites (§12) |
+| Fonts | brand + style fonts | `assets/fonts/` | fetch via Scrapling from font sites (§12) |
 | Models | **Demucs** (stem split: voice / music / SFX — install by default, it's small) | `python3 -c "import demucs"` | CPU install ≈ 300 MB total: `pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu` then `pip install demucs soundfile`; model `htdemucs` (≈ 80 MB) downloads on first run (§0d) |
 | Optional | Blender (headless 3D) | `blender -v` | blender.org |
 
@@ -55,9 +55,9 @@ Adapt the wording, keep the structure. Send it once per new project:
 > 4. **I build it** — storyboard + style frames for approval, then all scenes, sound design and music; you get contact sheets and low-res previews to give feedback.
 > 5. **Final render** — full-res MP4 (+ vertical/thumbnail if wanted), loudness-normalised, with a credits/licence list.
 >
-> **What to connect (one time).** Just tell me "connect the Firecrawl MCP" (or any of these) and I'll add it for you, or add them manually (setup below):
+> **What to connect (one time).** Just tell me "connect the Scrapling MCP" (or any of these) and I'll add it for you, or add them manually (setup below):
 > - **Required on your PC:** Node ≥18, Python ≥3.10, ffmpeg, Playwright + Chromium, faster-whisper, Demucs — I check these and install with your OK.
-> - **MCPs (recommended):** Playwright MCP (I browse sites and grab assets myself), Firecrawl (research, fonts, brand sites), ElevenLabs (SFX/music generation).
+> - **MCPs (recommended):** Playwright MCP (I browse sites and grab assets myself), Scrapling (research, fonts, brand sites), ElevenLabs (SFX/music generation).
 > - **MCPs or API keys (optional, better assets):** Freesound (SFX), Pexels + Pixabay (stock photos/video), LottieFiles (animations), Unsplash (photos).
 > - **API keys:** I've created a key file for you at `<full path>/.env`. Open it, paste each key after the `=` on its line, and **save**. Leave lines empty for platforms you don't use. Please don't paste keys into chat. Tell me "saved" and I'll check them (I only see whether each one is filled in, never the values).
 >
@@ -69,10 +69,10 @@ Then wait for the references + story (§2 step 0) and run preflight in parallel.
 
 ## 0b. Connecting MCPs (OpenCode)
 
-> **If this skill ships as the `opencode-motion-video-director` plugin**, two shortcuts exist: the `/mvd-setup` command starts Preflight in the current directory for you, and plugin option `"options": { "mcps": ["playwright", "firecrawl", "elevenlabs", "lottiefiles"] }` registers those MCP servers at runtime — each only if its API key is already set in the project `.env` or the OpenCode environment. The rest of this section still applies for manual setup.
+> **If this skill ships as the `opencode-motion-video-director` plugin**, two shortcuts exist: the `/mvd-setup` command starts Preflight in the current directory for you, and plugin option `"options": { "mcps": ["playwright", "scrapling", "elevenlabs", "lottiefiles"] }` registers those MCP servers at runtime — keyless ones (Playwright, Scrapling, LottieFiles) always, keyed ones only if their API key is already set in the project `.env` or the OpenCode environment. The rest of this section still applies for manual setup.
 
 Two ways — offer both:
-- **Ask the agent (easiest):** the user just says *"connect the Playwright / Firecrawl / ElevenLabs MCP"*. If you can run terminal commands, add it yourself with the OpenCode CLI (below), reading the key from `.env` — never echo it. Then tell the user to restart/reload the session if the new tools don't appear (`opencode service restart` or a fresh session).
+- **Ask the agent (easiest):** the user just says *"connect the Playwright / Scrapling / ElevenLabs MCP"*. If you can run terminal commands, add it yourself with the OpenCode CLI (below), reading the key from `.env` — never echo it. Then tell the user to restart/reload the session if the new tools don't appear (`opencode service restart` or a fresh session).
 - **Manual:** the user pastes the `mcp.servers` block into `opencode.json(c)` (project) or `~/.config/opencode/opencode.json(c)` (global).
 
 **CLI:**
@@ -94,10 +94,9 @@ In OpenCode, run `/mcps` to view, connect, disconnect or authenticate servers.
         "type": "local",
         "command": ["npx", "@playwright/mcp@latest", "--user-data-dir", "./.browser-profile", "--output-dir", "./cache/browser"]
       },
-      "firecrawl": {
+      "scrapling": {
         "type": "local",
-        "command": ["npx", "-y", "firecrawl-mcp"],
-        "environment": { "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}" }
+        "command": ["scrapling-mcp"]
       },
       "elevenlabs": {
         "type": "local",
@@ -119,9 +118,9 @@ In OpenCode, run `/mcps` to view, connect, disconnect or authenticate servers.
 **API keys for MCPs:** `{env:NAME}` reads OpenCode's process environment, **not** the project `.env`. Two safe options:
 1. **Wrapper script (recommended):** use `scripts/with-env.sh` (copied into the project) so the key stays out of config:
    ```jsonc
-   "firecrawl": {
+   "elevenlabs": {
      "type": "local",
-     "command": ["bash", "scripts/with-env.sh", "npx", "-y", "firecrawl-mcp"]
+     "command": ["bash", "scripts/with-env.sh", "uvx", "elevenlabs-mcp"]
    }
    ```
 2. **Export before launching:** `set -a; . ./.env; set +a; opencode` so `{env:...}` resolves.
@@ -141,8 +140,9 @@ Never commit real keys. Prefer project-scope config or `{env:...}` over literal 
 | Freesound | freesound.org → log in → https://freesound.org/apiv2/apply → create credentials → you get **Client ID** and **Client secret / API key** | `FREESOUND_API_KEY` (= the client secret / API key), `FREESOUND_CLIENT_ID` (only for OAuth2 original-file downloads) |
 | Pexels | https://www.pexels.com/api/ → "Your API key" | `PEXELS_API_KEY` |
 | Unsplash (optional) | https://unsplash.com/developers → New application → Access Key | `UNSPLASH_ACCESS_KEY` |
-| Firecrawl | https://www.firecrawl.dev/app/api-keys | `FIRECRAWL_API_KEY` |
 | ElevenLabs | elevenlabs.io → Developers / Profile → API Keys | `ELEVENLABS_API_KEY` |
+
+**Scrapling needs no API key** — it runs locally (`pip install "scrapling[ai]" && scrapling install`, §0 preflight); use the built-in `websearch` tool for discovery and Scrapling for fetching (§12).
 
 **The agent creates the file — the user only fills it in.** Never ask the user to create `.env` themselves.
 1. Run `bash scripts/create_env.sh <project>` (copy it from the skill's `scripts/`). It creates `<project>/.env` with comment lines and empty slots for all keys, keeps any values already there, and adds `.env`/`*.env` to `.gitignore`. Without bash, write the same file with your file tool.
@@ -156,7 +156,6 @@ PIXABAY_API_KEY=xxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx
 FREESOUND_CLIENT_ID=xxxxxxxxxxxxxxxxxxxx
 FREESOUND_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 PEXELS_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-FIRECRAWL_API_KEY=fc-xxxxxxxxxxxxxxxxxxxxxxxx
 ELEVENLABS_API_KEY=sk_xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 `.env` and `*.env` stay in `.gitignore` (the script does this).
@@ -168,7 +167,7 @@ ELEVENLABS_API_KEY=sk_xxxxxxxxxxxxxxxxxxxxxxxx
 - **Freesound** (SFX): search with token auth: `curl -s "https://freesound.org/apiv2/search/text/?query=whoosh&filter=license:%22Creative%20Commons%200%22&fields=id,name,username,license,duration,previews,url&page_size=15&token=$FREESOUND_API_KEY"` → download `previews["preview-hq-mp3"]` (good enough for SFX). Original WAV/FLAC needs OAuth2 (`FREESOUND_CLIENT_ID` + secret, user authorises once in the browser). Prefer CC0; for CC-BY log `username` + `url` for credits. Limit ≈ 60 req/min, 2000/day.
 - **Pexels**: `curl -s -H "Authorization: $PEXELS_API_KEY" "https://api.pexels.com/v1/search?query=desk+laptop&orientation=landscape&per_page=15"` → `photos[].src.original`; videos: `https://api.pexels.com/videos/search?query=…` → `videos[].video_files[]` (pick width ≥ 1920). Credit photographer.
 - **Unsplash**: `curl -s -H "Authorization: Client-ID $UNSPLASH_ACCESS_KEY" "https://api.unsplash.com/search/photos?query=…&per_page=15"` → `results[].urls.full`; credit photographer.
-- **Firecrawl** (via MCP preferred; REST fallback): `curl -s -X POST https://api.firecrawl.dev/v1/search -H "Authorization: Bearer $FIRECRAWL_API_KEY" -H "Content-Type: application/json" -d '{"query":"clash display font license","limit":5}'`; scrape a page: `/v1/scrape` with `{"url":"…","formats":["markdown"]}`.
+- **Scrapling** (no API key; MCP preferred, CLI fallback): discovery via the built-in `websearch` tool → then fetch/extract with the Scrapling MCP — `make_request` for fast HTTP reads, `browser_fetch_once` for JS-rendered or protected pages (handles Cloudflare), `browser_extract` for Markdown/HTML/element reads. Or straight from the shell: `scrapling extract get 'https://site/page' out.md` (static) / `scrapling extract fetch 'https://site/page' out.md --css-selector 'a.download'` (browser). Keep `main_content_only` on for clean Markdown.
 - **ElevenLabs** (SFX/music; VO only if the user asks you to generate it): SFX `curl -s -X POST "https://api.elevenlabs.io/v1/sound-generation" -H "xi-api-key: $ELEVENLABS_API_KEY" -H "Content-Type: application/json" -d '{"text":"deep cinematic boom with long tail","duration_seconds":3}' -o assets/sfx/boom.mp3`; TTS `POST /v1/text-to-speech/<voice_id>?output_format=mp3_44100_192`. Uses the user's credits — ask before bulk generation.
 - Write small reusable helpers (`scripts/fetch_pixabay.mjs`, `scripts/fetch_freesound.mjs`…) that read `.env`, search, download into `assets/…` and append to `manifest.json` (path, source page, author, license).
 
@@ -384,7 +383,7 @@ Default to crisp 2D; **switch to 3D for hero moments** (reveal, product, stat, l
 - **Placement:** captions orbit the subject (near face/hands), never cover eyes/mouth; change position per group to drive eye-trace; stay inside safe zones.
 - **Finish:** 2-stop vertical gradient fills, subtle bevel/drop shadow (0 4 12 rgba(0,0,0,.35)), glow = blurred copy behind (8–24 px, accent, 60–80 %), 3–6 % grain over type for film looks.
 
-### Font sourcing (Firecrawl → `assets/fonts/`)
+### Font sourcing (Scrapling → `assets/fonts/`)
 Search/scrape these first. Free or free-for-personal — **always read the license, log it in manifest.json, ask the user if commercial use is unclear.**
 | Site | Use for |
 |---|---|
@@ -396,7 +395,7 @@ Search/scrape these first. Free or free-for-personal — **always read the licen
 | https://dirtylinestudio.com/freebies/ | free display/brand fonts |
 | Google Fonts (fallback) | OFL staples: Inter, Poppins, Anton, Archivo Black, Permanent Marker, Caveat Brush, Allura, Space Mono |
 
-Workflow: `firecrawl_search "<style> font site:fontshare.com"` → `firecrawl_scrape` the font page for download link + license → `curl -L -o` → unzip `.ttf/.otf/.woff2` → register via `@font-face`/`FontFace` and **await `document.fonts.ready` before rendering frame 0**. Never ship a font whose license you couldn't verify.
+Workflow: search with the built-in `websearch` tool (`"<style> font site:fontshare.com"`) → open the font page with Scrapling (MCP `make_request`/`browser_extract`, or `scrapling extract get <page> out.md`) for download link + license → `curl -L -o` → unzip `.ttf/.otf/.woff2` → register via `@font-face`/`FontFace` and **await `document.fonts.ready` before rendering frame 0**. Never ship a font whose license you couldn't verify.
 
 ## 13. Reference-video protocol (if the user attaches references, use them)
 

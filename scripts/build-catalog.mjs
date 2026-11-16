@@ -100,7 +100,7 @@ function skillMeta(dir) {
 /** Keep in sync with MCP_CATALOG in src/index.ts and the table in README.md. */
 const MCPS = [
   { name: "playwright", key: null },
-  { name: "firecrawl", key: "FIRECRAWL_API_KEY" },
+  { name: "scrapling", key: null },
   { name: "elevenlabs", key: "ELEVENLABS_API_KEY" },
   { name: "lottiefiles", key: null },
 ]
@@ -207,8 +207,8 @@ function landingPage(pkg, skillName, files) {
       <a class="badge" href="https://www.npmjs.com/package/${escapeHtml(pkg.name)}">npm</a>
     </div>
   </header>
-  <img class="hero" src="explanation.jpg" width="1672" height="941"
-       alt="Video creation workflow: 1 Plan (explain the process and goal) — 2 Input (you provide references and a story) — 3 Voiceover (paste-ready ElevenLabs script, generate the MP3 and return it) — 4 Build (create the video, add assets and sound) — 5 Preview (review and iterate) — 6 Render (export mp4 with ffmpeg and deliver). Tools: SVG, p5, Three.js, GSAP, Motion Canvas, Revideo, ElevenLabs, Firecrawl, Playwright, LottieFiles, Freesound, Pexels/Pixabay, ffmpeg. Use when you ask to make or edit a video, animate, caption, add voiceover, or design sound.">
+  <img class="hero" src="explanation.jpg" width="2048" height="2048"
+       alt="Video creation workflow: 1 Plan (explain the process and goal) — 2 Input (you provide references and a story) — 3 Voiceover (paste-ready ElevenLabs script, generate the MP3 and return it) — 4 Build (create the video, add assets and sound) — 5 Preview (review and iterate) — 6 Render (export mp4 with ffmpeg and deliver). Tools: SVG, p5, Three.js, GSAP, Motion Canvas, Revideo, ElevenLabs, Scrapling, Playwright, LottieFiles, Freesound, Pexels/Pixabay, ffmpeg. Use when you ask to make or edit a video, animate, caption, add voiceover, or design sound.">
 
   <h2>Install</h2>
   <p><a href="https://www.npmjs.com/package/${escapeHtml(pkg.name)}">opencode-motion-video-director</a> is on npm:</p>
@@ -216,12 +216,13 @@ function landingPage(pkg, skillName, files) {
   <p>Then register the plugin in your <code>opencode.json(c)</code>:</p>
   <pre>{ "$schema": "https://opencode.ai/config.json",
   "plugins": ["opencode-motion-video-director"] }</pre>
-  <p>Optionally let it register the recommended MCP servers at runtime (each only when
-  its key is set in the project <code>.env</code> or your environment — keys never land in config):</p>
+  <p>Optionally let it register the recommended MCP servers at runtime (keyless ones
+  always, keyed ones only when their key is set in the project <code>.env</code> or your
+  environment — keys never land in config):</p>
   <pre>{ "$schema": "https://opencode.ai/config.json",
   "plugins": [
     { "package": "opencode-motion-video-director",
-      "options": { "mcps": ["playwright", "firecrawl", "elevenlabs", "lottiefiles"] } }
+      "options": { "mcps": ["playwright", "scrapling", "elevenlabs", "lottiefiles"] } }
   ] }</pre>
   <p class="lead">Prefer no plugin? The same skill is available as an HTTP skills catalog:</p>
   <pre>{ "$schema": "https://opencode.ai/config.json",

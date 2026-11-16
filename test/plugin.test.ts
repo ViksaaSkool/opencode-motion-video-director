@@ -48,7 +48,7 @@ describe("plugin shape", () => {
 describe("MCP catalog", () => {
   test("known servers declare their required keys correctly", () => {
     expect(MCP_CATALOG.playwright!.env).toBeUndefined()
-    expect(MCP_CATALOG.firecrawl!.env).toBe("FIRECRAWL_API_KEY")
+    expect(MCP_CATALOG.scrapling!.env).toBeUndefined()
     expect(MCP_CATALOG.elevenlabs!.env).toBe("ELEVENLABS_API_KEY")
     expect(MCP_CATALOG.elevenlabs!.envExtra).toEqual({ ELEVENLABS_MCP_BASE_PATH: "./assets" })
     expect(MCP_CATALOG.lottiefiles!.env).toBeUndefined()
@@ -69,7 +69,7 @@ describe("env helpers", () => {
     const path = join(repoRoot, "test", "fixtures", ".env.sample")
     const keys = readEnvFile(path)
     expect(keys.get("PIXABAY_API_KEY")).toBe("abc-123")
-    expect(keys.get("FIRECRAWL_API_KEY")).toBe("fc-xyz")
+    expect(keys.get("PEXELS_API_KEY")).toBe("pk-xyz")
     expect(keys.has("EMPTY_KEY")).toBe(true)
     expect(keys.has("COMMENT")).toBe(false)
   })
@@ -129,7 +129,9 @@ test("catalog build emits a human-readable landing page", () => {
   expect(html).toContain("opencode-motion-video-director")
   expect(html).toContain('"skills": ["https://viksaaskool.github.io/opencode-motion-video-director/"]')
   // the MCP table mirrors the plugin catalog
-  expect(html).toContain("FIRECRAWL_API_KEY")
+  // the MCP table mirrors the plugin catalog
+  expect(html).toContain("scrapling")
+  expect(html).not.toContain("firecrawl")
   expect(html).toContain("ELEVENLABS_API_KEY")
   // every catalog file is linked with a relative href that matches its Pages URL
   expect(html).toContain('href="motion-video-director/SKILL.md"')

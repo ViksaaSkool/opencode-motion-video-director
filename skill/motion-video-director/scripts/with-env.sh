@@ -5,9 +5,9 @@
 # environment, not the project `.env`. Point the MCP command at this wrapper so
 # keys stay in `.env` and out of your config:
 #
-#   "firecrawl": {
+#   "elevenlabs": {
 #     "type": "local",
-#     "command": ["bash", "scripts/with-env.sh", "npx", "-y", "firecrawl-mcp"]
+#     "command": ["bash", "scripts/with-env.sh", "uvx", "elevenlabs-mcp"]
 #   }
 #
 # Usage: with-env.sh <command> [args…]

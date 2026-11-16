@@ -14,12 +14,14 @@ done
 for m in faster_whisper whisperx rembg torch onnxruntime demucs; do
   if python3 -c "import $m" 2>/dev/null; then ok "py:$m" "installed"; else no "py:$m" "not installed"; fi
 done
+chk "scrapling" python3 -c "import scrapling; print('ok')"
+chk "scrapling-mcp" which scrapling-mcp
 ls models 2>/dev/null | grep -qi rvm && ok "model:RVM" "models/" || no "model:RVM" "not in models/"
 ls models 2>/dev/null | grep -qi sam2 && ok "model:SAM2" "models/" || no "model:SAM2" "not in models/ (optional)"
 [ -f .env ] && ok ".env" "present" || no ".env" "missing (API keys, see SKILL §0c)"
 grep -qsE '(^|/)\*?\.env$|^\.env' .gitignore && ok ".gitignore .env" "ignored" || no ".gitignore .env" "add .env to .gitignore"
 # key names only, values are never printed
-for k in PIXABAY_API_KEY FREESOUND_API_KEY FREESOUND_CLIENT_ID PEXELS_API_KEY UNSPLASH_ACCESS_KEY FIRECRAWL_API_KEY ELEVENLABS_API_KEY; do
+for k in PIXABAY_API_KEY FREESOUND_API_KEY FREESOUND_CLIENT_ID PEXELS_API_KEY UNSPLASH_ACCESS_KEY ELEVENLABS_API_KEY; do
   grep -qE "^$k=.+" .env 2>/dev/null && ok "key:$k" "set" || no "key:$k" "not set (optional unless needed)"
 done
 other=$(find . -maxdepth 3 -name "*.env" ! -path "./.env" ! -path "./node_modules/*" 2>/dev/null | head -5)
@@ -27,4 +29,4 @@ other=$(find . -maxdepth 3 -name "*.env" ! -path "./.env" ! -path "./node_module
 chk "imagemagick:montage" montage -version
 for c in opencode uvx magick; do command -v $c >/dev/null 2>&1 && ok "cli:$c" "available" || no "cli:$c" "not found (opencode = this agent; uvx = ElevenLabs MCP; magick = contact sheets, part of ImageMagick)"; done
 if command -v opencode >/dev/null 2>&1; then chk "opencode" opencode --version; fi
-echo "MCPs (Playwright, Firecrawl, ElevenLabs, LottieFiles, Freesound, Pexels/Pixabay): verify with 'opencode mcp list' or the '/mcps' command in this session. Missing → SKILL §0b; no MCP → REST APIs in §0c."
+echo "MCPs (Playwright, Scrapling, ElevenLabs, LottieFiles, Freesound, Pexels/Pixabay): verify with 'opencode mcp list' or the '/mcps' command in this session. Missing → SKILL §0b; no MCP → REST APIs in §0c."

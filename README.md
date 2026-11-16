@@ -2,7 +2,7 @@
 
 An [OpenCode](https://opencode.ai) plugin that ships the **Motion Video Director** skill: plan, direct, and produce code-drawn 2D/3D motion graphics and edited videos — reels, hooks, SaaS/product explainers, talking-head edits — locally, with your agent as director, producer, motion designer, editor and sound designer in one.
 
-Everything is drawn in code (Canvas/SVG/p5.brush/Three.js/GSAP in headless Chrome, Motion Canvas/Revideo), encoded with ffmpeg, and checked with a fast contact-sheet preview loop. Stock, fonts, SFX and references come from LottieFiles, Freesound, Pexels/Pixabay, Firecrawl, ElevenLabs, and visual browsing with the Playwright MCP.
+Everything is drawn in code (Canvas/SVG/p5.brush/Three.js/GSAP in headless Chrome, Motion Canvas/Revideo), encoded with ffmpeg, and checked with a fast contact-sheet preview loop. Stock, fonts, SFX and references come from LottieFiles, Freesound, Pexels/Pixabay, Scrapling, ElevenLabs, and visual browsing with the Playwright MCP.
 
 ## Install
 
@@ -21,7 +21,7 @@ That registers the `motion-video-director` skill. Ask for a video and your agent
 
 ### Options (optional MCP auto-setup)
 
-The workflow is smoother with the Playwright, Firecrawl and ElevenLabs MCP servers. Let the plugin register them at runtime (no `mcp.servers` config needed):
+The workflow is smoother with the Playwright, Scrapling and ElevenLabs MCP servers. Let the plugin register them at runtime (no `mcp.servers` config needed):
 
 ```jsonc
 {
@@ -29,7 +29,7 @@ The workflow is smoother with the Playwright, Firecrawl and ElevenLabs MCP serve
   "plugins": [
     {
       "package": "opencode-motion-video-director",
-      "options": { "mcps": ["playwright", "firecrawl", "elevenlabs"] }
+      "options": { "mcps": ["playwright", "scrapling", "elevenlabs"] }
     }
   ]
 }
@@ -38,7 +38,7 @@ The workflow is smoother with the Playwright, Firecrawl and ElevenLabs MCP serve
 | Name | Needs key | Key (in project `.env` or environment) |
 | --- | --- | --- |
 | `playwright` | no | — (visual browser, downloads land in `./cache/browser`) |
-| `firecrawl` | yes | `FIRECRAWL_API_KEY` |
+| `scrapling` | no | — (needs a local `pip install "scrapling[ai]" && scrapling install`) |
 | `elevenlabs` | yes | `ELEVENLABS_API_KEY` |
 | `lottiefiles` | no | — |
 

@@ -10,7 +10,6 @@ MAP = [  # (regex on lowercased name, standard name) - first match wins
  (r'pexels', 'PEXELS_API_KEY'),
  (r'unsplash.*secret', 'UNSPLASH_SECRET_KEY'),
  (r'unsplash', 'UNSPLASH_ACCESS_KEY'),
- (r'firecrawl', 'FIRECRAWL_API_KEY'),
  (r'eleven', 'ELEVENLABS_API_KEY'),
 ]
 src = pathlib.Path(sys.argv[1]); dst = pathlib.Path(sys.argv[2] if len(sys.argv) > 2 else '.env')

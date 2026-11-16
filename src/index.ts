@@ -10,7 +10,7 @@
  *
  *      "plugins": [{
  *        "package": "opencode-motion-video-director",
- *        "options": { "mcps": ["playwright", "firecrawl", "elevenlabs", "lottiefiles"] }
+ *        "options": { "mcps": ["playwright", "scrapling", "elevenlabs", "lottiefiles"] }
  *      }]
  *
  *    Each MCP is only registered when its API key (if any) is already set in the
@@ -62,9 +62,8 @@ export const MCP_CATALOG: Record<string, McpSpec> = {
   playwright: {
     args: ["npx", "@playwright/mcp@latest", "--user-data-dir", "./.browser-profile", "--output-dir", "./cache/browser"],
   },
-  firecrawl: {
-    env: "FIRECRAWL_API_KEY",
-    args: ["npx", "-y", "firecrawl-mcp"],
+  scrapling: {
+    args: ["scrapling-mcp"],
   },
   elevenlabs: {
     env: "ELEVENLABS_API_KEY",
