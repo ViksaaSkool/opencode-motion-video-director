@@ -16,6 +16,8 @@ for m in faster_whisper whisperx rembg torch onnxruntime demucs; do
 done
 chk "scrapling" python3 -c "import scrapling; print('ok')"
 chk "scrapling-mcp" which scrapling-mcp
+chk "kokoro (local TTS)" python3 -c "import kokoro; print('ok')"
+chk "edge-tts" which edge-tts
 ls models 2>/dev/null | grep -qi rvm && ok "model:RVM" "models/" || no "model:RVM" "not in models/"
 ls models 2>/dev/null | grep -qi sam2 && ok "model:SAM2" "models/" || no "model:SAM2" "not in models/ (optional)"
 [ -f .env ] && ok ".env" "present" || no ".env" "missing (API keys, see SKILL §0c)"

@@ -4,6 +4,8 @@ An [OpenCode](https://opencode.ai) plugin that ships the **Motion Video Director
 
 Everything is drawn in code (Canvas/SVG/p5.brush/Three.js/GSAP in headless Chrome, Motion Canvas/Revideo), encoded with ffmpeg, and checked with a fast contact-sheet preview loop. Stock, fonts, SFX and references come from LottieFiles, Freesound, Pexels/Pixabay, Scrapling, ElevenLabs, and visual browsing with the Playwright MCP.
 
+No ElevenLabs key? Voiceover still happens: write the script, then generate it locally with the bundled `make_vo.py` — Kokoro-82M → edge-tts → macOS `say`, all free, no API key.
+
 ## Install
 
 Add the plugin to your `opencode.json(c)`:

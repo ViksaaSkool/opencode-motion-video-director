@@ -8,3 +8,5 @@ catalog/
 cache/
 renders/
 assets/
+__pycache__/
+*.pyc

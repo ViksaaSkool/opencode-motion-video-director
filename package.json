@@ -1,6 +1,6 @@
 {
   "name": "opencode-motion-video-director",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Plan, direct, and produce code-drawn 2D/3D motion graphics and edited videos locally with OpenCode. Installs the motion-video-director skill plus a /mvd-setup preflight command and optional MCP auto-configuration.",
   "type": "module",
   "main": "./src/index.ts",

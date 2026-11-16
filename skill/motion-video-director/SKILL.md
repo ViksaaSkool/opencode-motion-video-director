@@ -1,6 +1,6 @@
 ---
 name: Motion Video Director
-description: "Plan, direct, and produce code-drawn 2D/3D motion graphics and edited videos (reels, hooks, SaaS/product explainers, talking-head edits) locally with OpenCode. Workflow: explain the process → user gives references + story → write a paste-ready ElevenLabs voiceover script → user generates and returns the MP3 → build, preview, render. Uses Canvas/SVG/p5.brush/Three.js/GSAP rendered in headless Chrome, Motion Canvas/Revideo, ffmpeg, small local AI models (cutout, transcription), plus LottieFiles, Freesound, Pexels/Pixabay, Scrapling and ElevenLabs MCPs, and the Playwright MCP to browse any website visually (Pinterest, Behance, Dribbble, brand sites) and grab image/video assets by itself. Use when the user asks to make, edit, animate, caption, voice, or sound-design a video."
+description: "Plan, direct, and produce code-drawn 2D/3D motion graphics and edited videos (reels, hooks, SaaS/product explainers, talking-head edits) locally with OpenCode. Workflow: explain the process → user gives references + story → write a paste-ready ElevenLabs voiceover script → user generates and returns the MP3 (no key? the agent generates it locally with Kokoro/edge-tts) → build, preview, render. Uses Canvas/SVG/p5.brush/Three.js/GSAP rendered in headless Chrome, Motion Canvas/Revideo, ffmpeg, small local AI models (cutout, transcription), plus LottieFiles, Freesound, Pexels/Pixabay, Scrapling and ElevenLabs MCPs, and the Playwright MCP to browse any website visually (Pinterest, Behance, Dribbble, brand sites) and grab image/video assets by itself. Use when the user asks to make, edit, animate, caption, voice, or sound-design a video."
 ---
 
 # Motion Video Director
@@ -29,12 +29,13 @@ You are director, producer, motion designer, editor and sound designer in one.
 | Frameworks | Motion Canvas or Revideo (optional) | `npm ls @motion-canvas/core @revideo/core` | `npm init @motion-canvas@latest` / `npm init @revideo@latest` |
 | Models | faster-whisper / WhisperX (word timing) | `python3 -c "import faster_whisper"` | `pip install faster-whisper` (use `small`/`base` model ≈ 150–500 MB) |
 | Models | Cutout: RobustVideoMatting (≈15 MB), rembg/u2netp (≈5 MB), SAM2-tiny (≈150 MB) | file in `models/` or `python3 -c "import rembg"` | download into `models/`; prefer smallest that works; CPU OK |
+| Models | VO fallback TTS: Kokoro-82M (local) | `python3 -c "import kokoro"` | `pip install kokoro` (local, Apache-2.0, CPU OK; model ≈300 MB on first run); optional `pip install edge-tts` (online, no key) — used by `make_vo.py` (§10b) |
 | Audio | loudness tools | `ffmpeg -filters | grep loudnorm` | comes with ffmpeg |
 | MCP | **LottieFiles** (search + Lottie Creator) | list tools | `npx -y @lottiefiles/creator-mcp@latest` |
 | MCP | **Freesound** (SFX, prefer CC0) | list tools | a Freesound MCP (e.g. sandraschi/sfx-mcp) + `FREESOUND_API_KEY`; no MCP → use the REST API directly (§0c) |
 | MCP | **Pexels / Pixabay** (stock photo/video) | list tools | e.g. xcollantes/free-stock-images-mcp + `PEXELS_API_KEY` / `PIXABAY_API_KEY`; no MCP → REST API directly (§0c) |
 | MCP | **Scrapling** (research, references, brand/font sites, anti-bot scraping) | `python3 -c "import scrapling"` + `which scrapling-mcp` | `pip install "scrapling[ai]"` then `scrapling install` (browser deps ≈ few hundred MB; no API key needed); MCP registration in §0b |
-| MCP | **ElevenLabs** (SFX gen, music, optional VO) | list tools | `uvx elevenlabs-mcp` + `ELEVENLABS_API_KEY` (§0b). Not required for VO — the user generates the MP3 on elevenlabs.io from your script |
+| MCP | **ElevenLabs** (SFX gen, music, optional VO) | list tools | `uvx elevenlabs-mcp` + `ELEVENLABS_API_KEY` (§0b). Not required for VO — the user generates the MP3 on elevenlabs.io from your script, or you generate it locally with `make_vo.py` when there's no key (§10b) |
 | MCP | **Playwright MCP** (visual browser: open sites, search, see results via screenshots, click, download — §16) | list tools (`playwright_browser_navigate`, `playwright_browser_take_screenshot`…) | add it to OpenCode's `mcp.servers` **on the user's PC** (§0b) so downloads land in the project: `"playwright": { "type": "local", "command": ["npx", "@playwright/mcp@latest", "--user-data-dir", "./.browser-profile", "--output-dir", "./cache/browser"] }` (Node ≥18; first run fetches Chromium via `npx playwright install chromium`). Fallback: the agent's own built-in browser, if it has one, then move files to the PC. |
 | Fonts | brand + style fonts | `assets/fonts/` | fetch via Scrapling from font sites (§12) |
 | Models | **Demucs** (stem split: voice / music / SFX — install by default, it's small) | `python3 -c "import demucs"` | CPU install ≈ 300 MB total: `pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu` then `pip install demucs soundfile`; model `htdemucs` (≈ 80 MB) downloads on first run (§0d) |
@@ -51,7 +52,7 @@ Adapt the wording, keep the structure. Send it once per new project:
 > **How we'll make this video**
 > 1. **You give me references + the story/plan** — reference videos/links/screenshots, what the video is about, who it's for, platform & format (16:9 / 9:16 / 1:1), target length, tone, CTA, brand assets (logo, colors, fonts), must-haves / must-avoids.
 > 2. **I write the voiceover script** — paste-ready for ElevenLabs (voice, model and settings included).
-> 3. **You generate the MP3 on elevenlabs.io and send it to me** (drop it into `assets/vo/`). Nothing gets built before this — the whole video is timed to your real voiceover.
+> 3. **You generate the MP3 on elevenlabs.io and send it to me** (drop it into `assets/vo/`) — or, if you'd rather not use ElevenLabs, say so and I generate the VO locally, free (Kokoro → edge-tts → macOS `say`, §10b). Nothing gets built before this — the whole video is timed to your real voiceover.
 > 4. **I build it** — storyboard + style frames for approval, then all scenes, sound design and music; you get contact sheets and low-res previews to give feedback.
 > 5. **Final render** — full-res MP4 (+ vertical/thumbnail if wanted), loudness-normalised, with a credits/licence list.
 >
@@ -169,6 +170,7 @@ ELEVENLABS_API_KEY=sk_xxxxxxxxxxxxxxxxxxxxxxxx
 - **Unsplash**: `curl -s -H "Authorization: Client-ID $UNSPLASH_ACCESS_KEY" "https://api.unsplash.com/search/photos?query=…&per_page=15"` → `results[].urls.full`; credit photographer.
 - **Scrapling** (no API key; MCP preferred, CLI fallback): discovery via the built-in `websearch` tool → then fetch/extract with the Scrapling MCP — `make_request` for fast HTTP reads, `browser_fetch_once` for JS-rendered or protected pages (handles Cloudflare), `browser_extract` for Markdown/HTML/element reads. Or straight from the shell: `scrapling extract get 'https://site/page' out.md` (static) / `scrapling extract fetch 'https://site/page' out.md --css-selector 'a.download'` (browser). Keep `main_content_only` on for clean Markdown.
 - **ElevenLabs** (SFX/music; VO only if the user asks you to generate it): SFX `curl -s -X POST "https://api.elevenlabs.io/v1/sound-generation" -H "xi-api-key: $ELEVENLABS_API_KEY" -H "Content-Type: application/json" -d '{"text":"deep cinematic boom with long tail","duration_seconds":3}' -o assets/sfx/boom.mp3`; TTS `POST /v1/text-to-speech/<voice_id>?output_format=mp3_44100_192`. Uses the user's credits — ask before bulk generation.
+- **VO without ElevenLabs (free, no key):** `python3 scripts/make_vo.py vo_script.txt assets/vo` — plain text file (blank-line blocks; `#`/`---` lines skipped) → tries Kokoro-82M (local, Apache-2.0) → edge-tts (online, no key) → macOS `say`. Voices + retakes in §10b.
 - Write small reusable helpers (`scripts/fetch_pixabay.mjs`, `scripts/fetch_freesound.mjs`…) that read `.env`, search, download into `assets/…` and append to `manifest.json` (path, source page, author, license).
 
 ## 0d. Demucs (local stem separation — install by default)
@@ -221,7 +223,7 @@ Drop `--two-stems` for 4 stems (drums/bass/other/vocals). ~1–2× realtime on C
 
 0. **References + story (required intake)** – after the kickoff message (§0a), collect: reference videos/links/screenshots, the story/plan (what happens, key message), audience, platform & format, target length, tone, CTA, brand assets, must-haves/must-avoids. If references are given, run §13 (+ Demucs stems, §0d) and present the recipe. Don't continue until you have at least the story and length.
 1. **Brief** – goal, audience, platform & aspect (9:16 1080×1920 / 16:9 1920×1080 / 1:1), length, brand (logo, palette, fonts), CTA, references, video type → intensity level (§4). Ask only what's missing.
-2. **VO script for ElevenLabs** – write it with the §10 guide: AV two-column script (Audio | Visual) for the plan + one **paste-ready ElevenLabs block** with model, voice and settings. Hook in first 3 s. → **Approve script.** → **The user generates the MP3 and sends it back** (`assets/vo/`). Steps 3+ (and any scene code) start only after the MP3 arrives.
+2. **VO script for ElevenLabs** – write it with the §10 guide: AV two-column script (Audio | Visual) for the plan + one **paste-ready ElevenLabs block** with model, voice and settings. Hook in first 3 s. → **Approve script.** → **The user generates the MP3 and sends it back** (`assets/vo/`) — or, with no ElevenLabs key, generate it locally with `make_vo.py` (§10b). Steps 3+ (and any scene code) start only after the VO arrives.
 3. **Storyboard / shot list** – per shot: time, VO line, visual, motion, transition, SFX, text on screen. Beat sheet with seconds.
 4. **Style board** – palette (hex + roles), fonts, 3–4 still frames rendered from code. → **Approve plan.**
 5. **Assets** – **VO intake:** receive the user's MP3 → `ffprobe` (duration, sample rate) + check clipping/loudness (`ffmpeg -af volumedetect`, `ebur128`) → transcribe with word timestamps (faster-whisper) → diff the transcript against the approved script and report missing/changed words or bad pronunciations (ask for a regenerated line if needed) → lock `beats.json` timings to the real audio. If the user explicitly wants to start early, use a temporary guide track and mark the timeline `TEMP` in PROGRESS.md. Then stock, Lottie, SFX, plus visual hunting on Pinterest/any site with the Playwright MCP (§16) for images, textures, footage and references; transcribe with word timestamps; cutout mattes if needed.
@@ -365,6 +367,23 @@ Alt hook (variant B): …
 Also give a **variant B** of the hook (and CTA if useful) so the user can A/B pick.
 
 **Tell the user how to generate it:** open elevenlabs.io → Text to Speech → choose the model and voice → set the settings → paste the block → Generate 2–3 takes → download the best as MP3 → send it to you / put it in `assets/vo/vo_v1.mp3`. If one line sounds wrong, regenerate only that line (paste it alone with the same settings) and send it as `vo_line07_fix.mp3` — you'll splice it on a pause. Don't edit the text after approval without telling you (timing and captions come from it).
+
+### 10b. No ElevenLabs key? Generate the VO locally (free)
+
+If the user has no ElevenLabs account — or prefers a local, no-cloud track — you generate the VO yourself with `scripts/make_vo.py` (copy it from the skill's `scripts/`). First write the spoken lines to a plain text file: one block per blank-line-separated paragraph (block = one caption group / scene beat); lines starting with `#` or `---` are skipped (script headers/separators). The script tries engines in order and prints which one it used:
+
+1. **Kokoro-82M** — fully local, offline, Apache-2.0 (commercial-safe), CPU OK. `pip install kokoro` (model ≈300 MB downloads on first run; languages other than English may need `brew install espeak-ng` / `apt install espeak-ng`). Voices: `af_heart` (default, warm female), `af_bella`, `af_nova`, `am_adam`, `am_michael`, `bm_george`… (`a` = American, `b` = British).
+2. **edge-tts** — online Microsoft neural voices, no key, excellent quality. `pip install edge-tts`. Voices: `en-US-ChristopherNeural` (default, deep male narrator), `en-US-AriaNeural`, `en-GB-SonnyNeural`… (list: `edge-tts --list-voices`). Unofficial API — needs internet; don't rely on it for offline work.
+3. **macOS `say`** — built-in, zero install. Voice `Samantha` (default); more with `say -v '?'` (enhanced voices in System Settings → Accessibility → Spoken Content).
+
+```bash
+python3 scripts/make_vo.py vo_script.txt assets/vo                          # auto: best available engine
+python3 scripts/make_vo.py vo_script.txt assets/vo --engine kokoro --voice af_bella
+python3 scripts/make_vo.py vo_script.txt assets/vo --engine edge --voice en-US-AriaNeural
+python3 scripts/make_vo.py vo_script.txt assets/vo --engine say --voice Samantha
+```
+
+Output: `assets/vo/vo_01.wav` (or `.mp3` for edge-tts), one file per block. **Word timing is unaffected** — captions and beats are aligned from the **actual audio** with faster-whisper (workflow step 5), so any engine works. Tell the user which engine produced the track: Kokoro is the closest free match to a paid cloud voice, but for a client-polished cut an ElevenLabs free-tier render (10k credits/month) is still worth a take. Per-line fixes: put the fixed block alone in a temp text file and run `make_vo.py` on it — blocks are numbered from the file, so a single block in → `vo_01.wav` out; splice the fix on a pause like in §10.
 
 ## 11. 3D motion design — "go 3D when it matters"
 
